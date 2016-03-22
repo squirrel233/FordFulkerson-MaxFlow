@@ -8,8 +8,6 @@ class Edge(object):
         return "edge: %s->%s; capacity: %s; flow: %s" %(self.vertex1, self.vertex2, self.capacity) #returning edges with flow
 
 
-class fordFulkersonMAxFlow(object):
-    adjascent={} # edges or vertex!?!?!!?
+class fordFulkersonMaxFlow(object):
+    adjascent={}
     edgeFlow={} # flow of each edge
-
-    
