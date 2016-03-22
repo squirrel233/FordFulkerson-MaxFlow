@@ -12,10 +12,4 @@ class fordFulkersonMAxFlow(object):
     adjascent={} # edges or vertex!?!?!!?
     edgeFlow={} # flow of each edge
 
-    def vertexAdd(self, vertex):
-        self.adjascent[vertex]=[] #list of vertices adjascent ot given vertices
-
-    def edgeAdd(self, vertex1, vertex2, edgeCapacity):
-        if(vertex1 != vertex2):
-            forwardEdge = Edge(vertex1, vertex2, capacity) #creating forward edges
-            reverseEdge = Edge(vertex2, vertex1, 0) #creating back edges
+    
