@@ -17,51 +17,54 @@ class fordFulkersonMaxFlow(object):
         self.adjascent = {}
         self.edgeFlow = {}
 
-    def edgeAdd(self, vertex1, vertex2, edgeCapacity):
-        forwardEdge = Edge(vertex1, vertex2, edgeCapacity) #creating forward edges
-        reverseEdge = Edge(vertex2, vertex1, 0) #creating back edges
-        forwardEdge.reverseEdge = forwardEdge # the back edge is a forward edge for a reverse network
-        self.adjascent[vertex1].append(forwardEdge) #adding a forward edge from vertex1 to adjascent vertices
-        self.adjascent[vertex2].append(reverseEdge) #adding a back edge from the adjascent vertices to vertex1
-        self.flow[forwardEdge], self.flow[reverseEdge] = 0,0 #initially flow through every edge is 0
-
     def vertexAdd(self, vertex):
         self.adjascent[vertex]=[] #list of vertices adjascent ot given vertices
 
     def getEdge(self, vertex):
         return(self.adjascent[vertex])
 
+    def edgeAdd(self, vertex1, vertex2, edgeCapacity):
+        forwardEdge = Edge(vertex1, vertex2, edgeCapacity) #creating forward edges
+        reverseEdge = Edge(vertex2, vertex1, 0) #creating back edges
+        forwardEdge.reverseEdge = forwardEdge # the back edge is a forward edge for a reverse network
+        self.adjascent[vertex1].append(forwardEdge) #adding a forward edge from vertex1 to adjascent vertices
+        self.adjascent[vertex2].append(reverseEdge) #adding a back edge from the adjascent vertices to vertex1
+        self.edgeFlow[forwardEdge], self.edgeFlow[reverseEdge] = 0,0 #initially flow through every edge is 0
+
     def searchPath(self, source, sink, path):
         if(source==sink):
             return(path)
-        for edge in getEdge(source) :
-            resflow = edge.edgeCapacity - self.flow[edge] #calculating residual flow for each edge
+        for edge in self.getEdge(source) :
+            resflow = edge.edgeCapacity - self.edgeFlow[edge] #calculating residual flow for each edge
             #initially residual flow is capacity of edge itself as flow is 0.
 
             if(resflow>0 and edge not in path):
-                searchPath(edge.sink, sink, path+[edge])#adding that edge to current path
+                result=self.searchPath(edge.vertex2, sink, path+[edge])#adding that edge to current path
                 if(result!=None):
                     return(path)
 
     def findMaxFlow(self, source, sink):
         path=self.searchPath(source, sink, [])
         while(path!=None):
-            for edge in path :#calculate residuals for all edges in that path
-                residualSetPath=edge.capacity - self.flow[edge]
+            
+            print(edge.edgeCapacity for edge in path)
+            residualSetPath = [edge.edgeCapacity - self.edgeFlow[edge] for edge in path]#calculate residuals for all edges in that path
             flow=min(residualSetPath)
             for edge in path:
-                self.flow[edge] = self.flow[edge] + flow
-                self.flow[edge.reverseEdge] = self.flow[edge.reverseEdge] - flow
+                self.edgeFlow[edge] = self.edgeFlow[edge] + flow
+                self.edgeFlow[edge.reverseEdge] = self.edgeFlow[edge.reverseEdge] - flow
             path=self.searchPath(source, sink, [])
-            print(self.flow)
-            return ("max flow: %s " %(sum(self.flow[edge] for edge in self.get_edges(source))))
+            print(self.edgeFlow)
+            return ("max flow: %s " %(sum(self.edgeFlow[edge] for edge in self.get_edges(source))))
 
 
-
-'''
-add_edge('s','a',9)
-add_edge('s','c',9)
-add_edge('a','t',10)
-add_edge('c','t',7)
-(max_flow('s','t')
-'''
+g = fordFulkersonMaxFlow()
+[g.vertexAdd(v) for v in "sabcdt"]
+g.edgeAdd('s','a',9)
+g.edgeAdd('s','c',9)
+g.edgeAdd('a','b',8)
+g.edgeAdd('b','t',10)
+g.edgeAdd('c','d',3)
+g.edgeAdd('d','t',7)
+g.edgeAdd('c','b',1)
+print("maximum flow across the given graph:", (g.findMaxFlow('s','t')))
