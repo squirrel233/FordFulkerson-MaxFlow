@@ -13,11 +13,12 @@ class Edge(object):
 
 
 class fordFulkersonMaxFlow(object):
-    adjascent={}
-    edgeFlow={}
+    def __init__(self):
+        self.adjascent = {}
+        self.edgeFlow = {}
 
     def edgeAdd(self, vertex1, vertex2, edgeCapacity):
-        forwardEdge = Edge(vertex1, vertex2, capacity) #creating forward edges
+        forwardEdge = Edge(vertex1, vertex2, edgeCapacity) #creating forward edges
         reverseEdge = Edge(vertex2, vertex1, 0) #creating back edges
         forwardEdge.reverseEdge = forwardEdge # the back edge is a forward edge for a reverse network
         self.adjascent[vertex1].append(forwardEdge) #adding a forward edge from vertex1 to adjascent vertices
@@ -33,8 +34,8 @@ class fordFulkersonMaxFlow(object):
     def searchPath(self, source, sink, path):
         if(source==sink):
             return(path)
-        for(edge in getEdge(source)):
-            resflow = Edge.edgeCapacity - self.flow[edge] #calculating residual flow for each edge
+        for edge in getEdge(source) :
+            resflow = edge.edgeCapacity - self.flow[edge] #calculating residual flow for each edge
             #initially residual flow is capacity of edge itself as flow is 0.
 
             if(resflow>0 and edge not in path):
@@ -42,7 +43,18 @@ class fordFulkersonMaxFlow(object):
                 if(result!=None):
                     return(path)
 
-
+    def findMaxFlow(self, source, sink):
+        path=self.searchPath(source, sink, [])
+        while(path!=None):
+            for edge in path :#calculate residuals for all edges in that path
+                residualSetPath=edge.capacity - self.flow[edge]
+            flow=min(residualSetPath)
+            for edge in path:
+                self.flow[edge] = self.flow[edge] + flow
+                self.flow[edge.reverseEdge] = self.flow[edge.reverseEdge] - flow
+            path=self.searchPath(source, sink, [])
+            print(self.flow)
+            return ("max flow: %s " %(sum(self.flow[edge] for edge in self.get_edges(source))))
 
 
 
