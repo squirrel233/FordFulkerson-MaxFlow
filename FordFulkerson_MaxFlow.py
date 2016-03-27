@@ -5,11 +5,10 @@ class Edge(object):
             self.vertex2=vertex2
             self.edgeCapacity = edgeCapacity
         elif(vertex1==vertex2):
-            print("ERROR: check graph for loops")
+            print("ERROR: check graph for self-loops")
             exit()
     def __repr__(self): #used to print objects.
-        print
-        return("edge: %s->%s; capacity: %s; flow: %s" %(self.vertex1, self.vertex2, self.capacity)) #returning edges with flow
+        return("\n edge: %s->%s; capacity: %s; flow: " %(self.vertex1, self.vertex2, self.edgeCapacity)) #returning edges with flow
 
 
 class fordFulkersonMaxFlow(object):
@@ -23,10 +22,11 @@ class fordFulkersonMaxFlow(object):
     def getEdge(self, vertex):
         return(self.adjascent[vertex])
 
-    def edgeAdd(self, vertex1, vertex2, edgeCapacity):
+    def edgeAdd(self, vertex1, vertex2, edgeCapacity=0):#!!!!!!!!!!!
         forwardEdge = Edge(vertex1, vertex2, edgeCapacity) #creating forward edges
         reverseEdge = Edge(vertex2, vertex1, 0) #creating back edges
         forwardEdge.reverseEdge = forwardEdge # the back edge is a forward edge for a reverse network
+        reverseEdge.reverseEdge = forwardEdge#!!!!!!!!
         self.adjascent[vertex1].append(forwardEdge) #adding a forward edge from vertex1 to adjascent vertices
         self.adjascent[vertex2].append(reverseEdge) #adding a back edge from the adjascent vertices to vertex1
         self.edgeFlow[forwardEdge], self.edgeFlow[reverseEdge] = 0,0 #initially flow through every edge is 0
@@ -35,27 +35,27 @@ class fordFulkersonMaxFlow(object):
         if(source==sink):
             return(path)
         for edge in self.getEdge(source) :
-            resflow = edge.edgeCapacity - self.edgeFlow[edge] #calculating residual flow for each edge
             #initially residual flow is capacity of edge itself as flow is 0.
-
+            resflow = edge.edgeCapacity - self.edgeFlow[edge] #calculating residual flow for each edge
             if(resflow>0 and edge not in path):
                 result=self.searchPath(edge.vertex2, sink, path+[edge])#adding that edge to current path
                 if(result!=None):
-                    return(path)
+                    return(result)
 
     def findMaxFlow(self, source, sink):
         path=self.searchPath(source, sink, [])
         while(path!=None):
-            
-            print(edge.edgeCapacity for edge in path)
             residualSetPath = [edge.edgeCapacity - self.edgeFlow[edge] for edge in path]#calculate residuals for all edges in that path
             flow=min(residualSetPath)
             for edge in path:
-                self.edgeFlow[edge] = self.edgeFlow[edge] + flow
-                self.edgeFlow[edge.reverseEdge] = self.edgeFlow[edge.reverseEdge] - flow
+                #print(self.edgeFlow[edge], self.edgeFlow[edge.reverseEdge])
+                self.edgeFlow[edge] += flow
+                #print(self.edgeFlow[edge], self.edgeFlow[edge.reverseEdge])
+                self.edgeFlow[edge.reverseEdge] -= flow
+                #print(self.edgeFlow[edge], self.edgeFlow[edge.reverseEdge])
             path=self.searchPath(source, sink, [])
-            print(self.edgeFlow)
-            return ("max flow: %s " %(sum(self.edgeFlow[edge] for edge in self.get_edges(source))))
+        print(self.edgeFlow)
+        return (sum(self.edgeFlow[edge] for edge in self.getEdge(source)))
 
 
 g = fordFulkersonMaxFlow()
