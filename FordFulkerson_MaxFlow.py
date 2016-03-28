@@ -1,3 +1,5 @@
+# written in python3
+
 class fordFulkersonMaxFlow(object):
     def __init__(self):
         self.adjascent = {}
@@ -56,28 +58,50 @@ class edgeInfo(object):
         return("\n edge: %s->%s; capacity: %s; flow: " %(self.vertex1, self.vertex2, self.edgeCapacity)) #returning edges with flow
 
 
-
+'''HANDLE WRONG INPUT CASES!!!!!!!!!!!!!!!!!!!!
+1) number of edges must be greater than number of vertices??
+2) Can there be multiple source nodes or sink nodes??
+4) Loops?? cus a path like sabac might exist but aba is a loop
+'''
 ff=fordFulkersonMaxFlow()
 # see below for sample input
 n=int(input("enter number of vertices: "))
 v=str(input("enter vertex labels(Note: first vertex will be source and last vertex will be sink). eg- sabcdt: "))
+if(len(v)!=n):
+    print("incorrect number of vertices")
+    exit()
 print("source node: ", v[0])
 print("sink node: ", v[len(v)-1])
-#for(vertex in v):
+v1List=[] #Stores all v1's entered. Used to ensure that source node is entered.
+v2List=[] #Stores all v2's entered. Used to ensure that sink node is entered
 [ff.vertexAdd(vertex) for vertex in v]
 e=int(input("enter number of edges: "))
 for i in range(0,e):
     v1=input("enter starting vertex of edge: ")
-    if(v1 not in v):
-        print("vertex doesn't exist")
+    if(v1 not in v or v1==v[len(v)-1]): #the vertex must be present and cannot be sink node
+        print("ERROR: Invalid vertex")
         exit()
+    else:
+        v1List.append(v1)
     v2=input("enter ending vertex of edge: ")
-    if(v2 not in v):
-        print("vertex doesn't exist")
+    if(v2 not in v or v2==v[0]): #the vertex must be present and cannot be source node.
+        print("ERROR: Invalid vertex")
         exit()
+    else:
+        v2List.append(v2)
     c=int(input("enter edge capacity: "))
-    ff.edgeAdd(v1, v2, c)
-print("maximum flow across the given graph:", (ff.findMaxFlow(v[0],v[len(v)-1])))
+    if(c>0):
+        ff.edgeAdd(v1, v2, c)
+    else:
+        print("ERROR: edge capacity cannot be negative ")
+if(v[0] not in v1List):
+    print("Source node not entered.")
+    exit();
+elif(v[len(v)-1] not in v2List):
+    print("Sink node not entered")
+    exit();
+else:
+    print("maximum flow across the given graph:", (ff.findMaxFlow(v[0],v[len(v)-1])))
 
 
 '''
