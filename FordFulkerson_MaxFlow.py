@@ -1,4 +1,4 @@
-class Edge(object):
+class edgeInfo(object):
     def __init__(self, vertex1, vertex2, edgeCapacity):
         if(vertex1!=vertex2):
             self.vertex1 = vertex1
@@ -22,11 +22,11 @@ class fordFulkersonMaxFlow(object):
     def getEdge(self, vertex):
         return(self.adjascent[vertex])
 
-    def edgeAdd(self, vertex1, vertex2, edgeCapacity=0):#!!!!!!!!!!!
-        forwardEdge = Edge(vertex1, vertex2, edgeCapacity) #creating forward edges
-        reverseEdge = Edge(vertex2, vertex1, 0) #creating back edges
-        forwardEdge.reverseEdge = forwardEdge # the back edge is a forward edge for a reverse network
-        reverseEdge.reverseEdge = forwardEdge#!!!!!!!!
+    def edgeAdd(self, vertex1, vertex2, edgeCapacity):
+        forwardEdge = edgeInfo(vertex1, vertex2, edgeCapacity) #creating forward edges
+        reverseEdge = edgeInfo(vertex2, vertex1, 0) #creating back edges
+        forwardEdge.reverseEdge = reverseEdge # the back edge is a forward edge for a reverse network
+        reverseEdge.reverseEdge = forwardEdge
         self.adjascent[vertex1].append(forwardEdge) #adding a forward edge from vertex1 to adjascent vertices
         self.adjascent[vertex2].append(reverseEdge) #adding a back edge from the adjascent vertices to vertex1
         self.edgeFlow[forwardEdge], self.edgeFlow[reverseEdge] = 0,0 #initially flow through every edge is 0
@@ -48,11 +48,9 @@ class fordFulkersonMaxFlow(object):
             residualSetPath = [edge.edgeCapacity - self.edgeFlow[edge] for edge in path]#calculate residuals for all edges in that path
             flow=min(residualSetPath)
             for edge in path:
-                #print(self.edgeFlow[edge], self.edgeFlow[edge.reverseEdge])
                 self.edgeFlow[edge] += flow
-                #print(self.edgeFlow[edge], self.edgeFlow[edge.reverseEdge])
                 self.edgeFlow[edge.reverseEdge] -= flow
-                #print(self.edgeFlow[edge], self.edgeFlow[edge.reverseEdge])
+                #print(edge, self.edgeFlow[edge], self.edgeFlow[edge.reverseEdge]) #prints each edge along with the forward flow and reverse flow
             path=self.searchPath(source, sink, [])
         print(self.edgeFlow)
         return (sum(self.edgeFlow[edge] for edge in self.getEdge(source)))
