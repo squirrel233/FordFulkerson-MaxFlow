@@ -1,16 +1,3 @@
-class edgeInfo(object):
-    def __init__(self, vertex1, vertex2, edgeCapacity):
-        if(vertex1!=vertex2):
-            self.vertex1 = vertex1
-            self.vertex2=vertex2
-            self.edgeCapacity = edgeCapacity
-        elif(vertex1==vertex2):
-            print("ERROR: check graph for self-loops")
-            exit()
-    def __repr__(self): #used to print objects.
-        return("\n edge: %s->%s; capacity: %s; flow: " %(self.vertex1, self.vertex2, self.edgeCapacity)) #returning edges with flow
-
-
 class fordFulkersonMaxFlow(object):
     def __init__(self):
         self.adjascent = {}
@@ -56,13 +43,68 @@ class fordFulkersonMaxFlow(object):
         return (sum(self.edgeFlow[edge] for edge in self.getEdge(source)))
 
 
-g = fordFulkersonMaxFlow()
-[g.vertexAdd(v) for v in "sabcdt"]
-g.edgeAdd('s','a',9)
-g.edgeAdd('s','c',9)
-g.edgeAdd('a','b',8)
-g.edgeAdd('b','t',10)
-g.edgeAdd('c','d',3)
-g.edgeAdd('d','t',7)
-g.edgeAdd('c','b',1)
-print("maximum flow across the given graph:", (g.findMaxFlow('s','t')))
+class edgeInfo(object):
+    def __init__(self, vertex1, vertex2, edgeCapacity):
+        if(vertex1!=vertex2):
+            self.vertex1 = vertex1
+            self.vertex2=vertex2
+            self.edgeCapacity = edgeCapacity
+        elif(vertex1==vertex2):
+            print("ERROR: check graph for self-loops")
+            exit()
+    def __repr__(self): #used to print objects.
+        return("\n edge: %s->%s; capacity: %s; flow: " %(self.vertex1, self.vertex2, self.edgeCapacity)) #returning edges with flow
+
+
+
+ff=fordFulkersonMaxFlow()
+# see below for sample input
+n=int(input("enter number of vertices: "))
+v=str(input("enter vertex labels(Note: first vertex will be source and last vertex will be sink). eg- sabcdt: "))
+print("source node: ", v[0])
+print("sink node: ", v[len(v)-1])
+#for(vertex in v):
+[ff.vertexAdd(vertex) for vertex in v]
+e=int(input("enter number of edges: "))
+for i in range(0,e):
+    v1=input("enter starting vertex of edge: ")
+    if(v1 not in v):
+        print("vertex doesn't exist")
+        exit()
+    v2=input("enter ending vertex of edge: ")
+    if(v2 not in v):
+        print("vertex doesn't exist")
+        exit()
+    c=int(input("enter edge capacity: "))
+    ff.edgeAdd(v1, v2, c)
+print("maximum flow across the given graph:", (ff.findMaxFlow(v[0],v[len(v)-1])))
+
+
+'''
+enter number of vertices: 6
+enter vertex labels(Note: first vertex will be source and last vertex will be sink). eg- sabcdt: sabcdt
+source node:  s
+sink node:  t
+enter number of edges: 7
+enter starting vertex of edge: s
+enter ending vertex of edge: a
+enter edge capacity: 9
+enter starting vertex of edge: s
+enter ending vertex of edge: c
+enter edge capacity: 8
+enter starting vertex of edge: a
+enter ending vertex of edge: b
+enter edge capacity: 8
+enter starting vertex of edge: b
+enter ending vertex of edge: t
+enter edge capacity: 10
+enter starting vertex of edge: c
+enter ending vertex of edge: d
+enter edge capacity: 3
+enter starting vertex of edge: d
+enter ending vertex of edge: t
+enter edge capacity: 7
+enter starting vertex of edge: c
+enter ending vertex of edge: b
+enter edge capacity: 1
+'''
