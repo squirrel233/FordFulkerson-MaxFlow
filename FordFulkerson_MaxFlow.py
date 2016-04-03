@@ -62,11 +62,11 @@ class edgeInfo(object):
 1) Can there be multiple source nodes or sink nodes??
 2) Loops?? cus a path like s-a-b-a-c might exist but aba is a loop
 3) Can there be multiple edges between the same 2 vertices???
-does not handle multiple entries of wrong inputs. Only till count of e !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 '''
 ff=fordFulkersonMaxFlow()
+
 # see below for sample input
-flag=1
+
 while True:
     n=int(input("enter number of vertices: "))
     v=str(input("enter vertex labels(Note: first vertex will be source and last vertex will be sink). eg- sabcdt: "))
@@ -79,35 +79,29 @@ while True:
         continue
     print("source node: ", v[0])
     print("sink node: ", v[len(v)-1])
-    v1List=[] #Stores all v1's entered. Used to ensure that source node is entered.
-    v2List=[] #Stores all v2's entered. Used to ensure that sink node is entered
+    v1List=[] #Stores all v1's entered. Used to ensure that source node is entered and sink node cannot be entered.
+    v2List=[] #Stores all v2's entered. Used to ensure that sink node is entered and source node cannot be entered.
     [ff.vertexAdd(vertex) for vertex in v]
     e=int(input("enter number of edges: "))
-    #count=e
     while(e!=0):
         v1=input("enter starting vertex of edge: ")
         if((v1 not in v) or v1==v[len(v)-1]): #the vertex must be present and cannot be sink node
-            #count-=1
-            print("ERROR: Invalid vertex.\n")#Attempts left= ",count )
+            print("ERROR: Invalid vertex.\n")
             continue
         else:
             v1List.append(v1)
         v2=input("enter ending vertex of edge: ")
         if(v2 not in v or v2==v[0]): #the vertex must be present and cannot be source node.
-            #count-=1
-            print("ERROR: Invalid vertex.\n")#Attempts left= ",count)
+            print("ERROR: Invalid vertex.\n")
             continue
         else:
             v2List.append(v2)
         c=int(input("enter edge capacity: "))
         if(c<0):
             #count-=1
-            print("ERROR: edge capacity cannot be negative.\n")#Attempts left= ",count)
+            print("ERROR: edge capacity cannot be negative.\n")
             continue
         else:
-            if(len(setV)!=len(set(setV))):
-                print("Edge already exists. Try again")
-                continue
             e-=1
             ff.edgeAdd(v1, v2, c)
 
@@ -123,6 +117,8 @@ while True:
     print("")
     exit()
 
+#Sample input
+#___________________________________________________
 '''
 enter number of vertices: 6
 enter vertex labels(Note: first vertex will be source and last vertex will be sink). eg- sabcdt: sabcdt
