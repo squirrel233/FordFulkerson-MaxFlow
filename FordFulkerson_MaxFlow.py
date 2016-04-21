@@ -1,4 +1,4 @@
-# written in python3
+# written in python3. 
 
 class fordFulkersonMaxFlow(object):
     def __init__(self):
@@ -117,33 +117,55 @@ while True:
     print("")
     exit()
 
-#Sample input
-#___________________________________________________
+#Sample input and output. Input based on figure "SampleInput.jpeg which is in the compressed folder"
+#sample input taken from http://lpsolve.sourceforge.net/5.5/DIMACS_maxf.htm
 '''
 enter number of vertices: 6
-enter vertex labels(Note: first vertex will be source and last vertex will be sink). eg- sabcdt: sabcdt
-source node:  s
-sink node:  t
-enter number of edges: 7
-enter starting vertex of edge: s
-enter ending vertex of edge: a
-enter edge capacity: 9
-enter starting vertex of edge: s
-enter ending vertex of edge: c
-enter edge capacity: 8
+enter vertex labels(Note: first vertex will be source and last vertex will be sink). eg- sabcdt: abcdef
+source node:  a
+sink node:  f
+enter number of edges: 8
 enter starting vertex of edge: a
 enter ending vertex of edge: b
-enter edge capacity: 8
+enter edge capacity: 5
+enter starting vertex of edge: a
+enter ending vertex of edge: c
+enter edge capacity: 15
 enter starting vertex of edge: b
-enter ending vertex of edge: t
-enter edge capacity: 10
+enter ending vertex of edge: d
+enter edge capacity: 5
+enter starting vertex of edge: b
+enter ending vertex of edge: e
+enter edge capacity: 5
 enter starting vertex of edge: c
 enter ending vertex of edge: d
-enter edge capacity: 3
-enter starting vertex of edge: d
-enter ending vertex of edge: t
-enter edge capacity: 7
+enter edge capacity: 5
 enter starting vertex of edge: c
-enter ending vertex of edge: b
-enter edge capacity: 1
+enter ending vertex of edge: e
+enter edge capacity: 5
+enter starting vertex of edge: d
+enter ending vertex of edge: f
+enter edge capacity: 15
+enter starting vertex of edge: e
+enter ending vertex of edge: f
+enter edge capacity: 5
+{
+ edge: d->f; capacity: 15; flow: : 10, 
+ edge: e->c; capacity: 0; flow: : -5, 
+ edge: c->d; capacity: 5; flow: : 5, 
+ edge: a->b; capacity: 5; flow: : 5, 
+ edge: b->a; capacity: 0; flow: : -5, 
+ edge: c->e; capacity: 5; flow: : 5, 
+ edge: a->c; capacity: 15; flow: : 10, 
+ edge: c->a; capacity: 0; flow: : -10, 
+ edge: f->e; capacity: 0; flow: : -5, 
+ edge: f->d; capacity: 0; flow: : -10, 
+ edge: e->b; capacity: 0; flow: : 0, 
+ edge: b->d; capacity: 5; flow: : 5, 
+ edge: d->b; capacity: 0; flow: : -5, 
+ edge: e->f; capacity: 5; flow: : 5, 
+ edge: d->c; capacity: 0; flow: : -5, 
+ edge: b->e; capacity: 5; flow: : 0}
+maximum flow across the given graph: 15
+
 '''
